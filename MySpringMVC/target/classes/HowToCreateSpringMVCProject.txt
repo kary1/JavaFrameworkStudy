@@ -91,3 +91,42 @@ public class HelloWorldController {
       <property name="suffix" value=".jsp"></property><!-- 后缀 -->
       <property name="prefix" value="/"></property><!-- 前缀 -->
     </bean>
+    
+    
+Restful风格
+    页面调用方法"stu/1/2.do" 
+    @RequestMapping(value="stu/{id}/{pid}", method=RequestMethod.GET)
+	@ResponseBody//(把返回值作为响应体对待，不作为逻辑视图名)
+	public String getData(@PathVariable("pid") Integer a,@PathVariable("id") Integer b){
+	    System.out.println(a+":"+b);
+		return "{\"id\": 3}";//添加 Jackson-databind依赖 可以直接把字符串解析为json格式输出给前端界面
+	}
+	
+非Restful风格
+    页面调用方法"stu.do?id=3&&id=2" 
+    @RequestMapping(value="stu", method=RequestMethod.GET)
+	public String getData(@RequestParam("pid") Integer a,@RequestParam("id") Integer b){
+	    System.out.println(a+":"+b);
+		return "show";//逻辑视图名
+	}
+	
+异常处理
+  1.
+  <bean id="exception" class="com.sky.exceptions.MyException"></bean>
+  //异常处理类  需实现HandlerExceptionResolver并配置bean
+  public class MyException implements HandlerExceptionResolver{
+	@Override
+	public ModelAndView resolveException(HttpServletRequest req,
+			HttpServletResponse resp, Object handler, Exception e) {
+		//e.printStackTrace();
+		return new ModelAndView("exception");
+  }
+  2.此方法只能处理本controller中的请求出现的对应异常--针对单个handler而言
+     在controller类中添加方法在方法上增加注解   
+     --{xxxException.class,xxxException.class}表示此方法可以捕获的异常
+  @Exceptionhandler({Exceptin.class})
+  public ModelAndView resolveException(Exception e) {
+		e.printStackTrace();
+		return new ModelAndView("exception");
+  }
+  3.@
