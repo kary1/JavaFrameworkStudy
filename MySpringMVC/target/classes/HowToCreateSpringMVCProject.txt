@@ -1,0 +1,93 @@
+1.创建项目
+
+2.导入jar包--pom.xml(可以继承)
+  <!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>4.3.4.RELEASE</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <version>4.3.4.RELEASE</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <version>4.3.4.RELEASE</version>
+    </dependency>
+    
+ 3.配置web.xml
+    <servlet>
+      <servlet-name>SpringMvc</servlet-name>
+      <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+      <init-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:springmvc.xml</param-value>
+      </init-param>
+    </servlet>
+    <servlet-mapping>
+      <servlet-name>SpringMvc</servlet-name>
+      <url-pattern>*.do</url-pattern><!-- 截获所有以.do结尾的请求 -->
+    </servlet-mapping>
+    
+4.为项目添加spring支持，右键--MyEclipse--Project Facets--Install MyEclipse Report Web Runtime Facet
+(在src/main/resources文件夹下创建springmvc.xml文件)
+
+5(1).创建自己的xxxController实现Controller接口
+6(1).配置springmvc.xml
+    <bean name="/helloWorld" class="com.sky.controllers.HelloWorldController"></bean>
+    <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"></bean>
+    
+5(2).创建自己的xxxController继承AbstractController类
+6(2).配置springmvc.xml
+    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+      <property name="mappings">
+        <props>
+          <prop key="/helloWorld.do">helloWorld</prop>
+          <prop key="/helloShangHai.do">helloShangHai</prop>
+        </props>
+      </property>
+    </bean><!-- 映射器 -->
+    <bean id="helloShangHai" class="com.sky.controllers.HelloShangHaiController"></bean>
+    <bean id="helloWorld" class="com.sky.controllers.HelloWorldController"></bean>
+
+5(3).<!--1.BeanNameUrlHandlerMapping 处理器映射器作用  SimpleControllerHandlerAdapter 处理器适配器作用  需要实现Controller接口 -->
+     <bean name="/helloWorld.do" class="com.sky.controllers.HelloWorldController" ></bean> 
+     <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"></bean>
+6(3).<bean class="com.sky.controllers.HelloWorldController"/>|<context:component-scan base-package="com.sky.controllers">
+
+5(全注解)配置springmvc.xml--新建Spring Bean Definition 添加nameSpace   mvc/p/context/aop/beans
+        <!-- controller scanner -->
+        <context:component-scan base-package="com.sky.controllers"></context:component-scan>
+        <!-- start annotation driver -->
+        <mvc:annotation-driven/>
+6(全注解)
+@Controller
+public class HelloWorldController {
+
+	@RequestMapping(value="/welcome", method=RequestMethod.GET)
+	public ModelAndView welcome(HttpServletRequest req , HttpServletResponse resp, ModelMap modelmap) throws Exception {
+		modelmap.put("welcome", "Hello,World!");
+		return new ModelAndView("show", modelmap);
+	}
+	
+	@RequestMapping(value="/welcome", method=RequestMethod.POST)
+	public ModelAndView welcome(ModelMap modelmap) throws Exception {
+		modelmap.put("welcome", "Hello,hahaha!");
+		ModelAndView mav = new ModelAndView("show");
+		mav.addObject(modelmap);
+		return mav;
+	}
+}
+	
+
+7.在springmvc.xml配置视图解析器
+    <!-- 视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+      <property name="suffix" value=".jsp"></property><!-- 后缀 -->
+      <property name="prefix" value="/"></property><!-- 前缀 -->
+    </bean>

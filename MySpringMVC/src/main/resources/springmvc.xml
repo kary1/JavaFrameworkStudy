@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
+
+
+    <!--1.BeanNameUrlHandlerMapping 处理器映射器作用  SimpleControllerHandlerAdapter 处理器适配器作用  需要实现Controller接口 -->
+<!--     
+    <bean name="/helloWorld.do" class="com.sky.controllers.HelloWorldController" ></bean> 
+    <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"></bean>
+ -->
+ 
+
+    <!--2 SimpleUrlHandlerMapping处理器映射器  需要继承AbstractController类 -->
+ <!-- 
+    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+      <property name="mappings">
+        <props>
+          <prop key="/helloWorld.do">helloWorld</prop>
+          <prop key="/helloShangHai.do">helloShangHai</prop>
+        </props>
+      </property>
+    </bean>映射器
+    <bean id="helloShangHai" class="com.sky.controllers.HelloShangHaiController"></bean>
+    <bean id="helloWorld" class="com.sky.controllers.HelloWorldController"></bean>
+ -->
+ 
+ 
+  <!--3 使用注解  -->
+<!--   
+  <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"></bean>
+  <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"></bean>
+  //controller scanner 
+  <context:component-scan base-package="com.sky.controllers"></context:component-scan>
+  //start annotation driver
+  <mvc:annotation-driven/>
+-->  
+
+
+  <!--4 全注解 -->
+  <!-- controller scanner -->
+  <context:component-scan base-package="com.sky.controllers"></context:component-scan>
+  <!-- start annotation driver -->
+  <mvc:annotation-driven/>
+
+
+    <!-- 视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+      <property name="suffix" value=".jsp"></property><!-- 后缀 -->
+      <property name="prefix" value="/"></property><!-- 前缀 -->
+    </bean>
+    
+</beans>
