@@ -21,8 +21,9 @@ public class MyController {
 		System.out.println("来来来");
 		return "index";
 	}
-	@RequestMapping(value="upflie", method=RequestMethod.POST)
+	@RequestMapping(value="upfile", method=RequestMethod.POST)
 	public String springUpLoad(HttpServletRequest req) throws IllegalStateException, IOException{
+		
 		CommonsMultipartResolver mr = new CommonsMultipartResolver(req.getServletContext());
 		if (mr.isMultipart(req)) {
 			MultipartHttpServletRequest msr = (MultipartHttpServletRequest) req;
@@ -30,7 +31,7 @@ public class MyController {
 			while(it.hasNext()){
 				MultipartFile file = msr.getFile(it.next().toString());
 				if(file != null){
-					String path = "E:/springupload"+file.getOriginalFilename();
+					String path = "E:/springupload/"+file.getOriginalFilename();
 					file.transferTo(new File(path));
 				}
 			}

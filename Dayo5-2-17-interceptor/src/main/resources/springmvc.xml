@@ -10,13 +10,18 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
-
-
+  
   <context:component-scan base-package="com.sky.controllers"></context:component-scan>
   <mvc:annotation-driven/>
- 
-  <mvc:interceptors>
-  
+
+   <!-- 文件上传服务器端配置 -->
+  <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    <property name="maxUploadSize" value="104857600"></property>
+    <property name="defaultEncoding" value="utf-8"></property>
+  </bean>
+
+<!-- 拦截器 -->
+ <mvc:interceptors>
     <bean class="com.sky.controllers.MyInterceptor"></bean>
     <mvc:interceptor>
       <mvc:mapping path="/test.do"/>
@@ -26,15 +31,9 @@
       <mvc:mapping path="/test.do"/>
       <bean class="com.sky.controllers.MyInterceptor"></bean>
     </mvc:interceptor>
-    
   </mvc:interceptors>
-  
-  <!-- 文件上传服务器端配置 -->
-  <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-    <property name="maxUploadSize" value="104857600"></property>
-    <property name="defaultEncoding" value="utf-8"></property>
-  </bean>
-  
+
+<!-- 试图解析器  -->
   <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     <property name="prefix" value="/"></property>
     <property name="suffix" value=".jsp"></property>
