@@ -23,7 +23,7 @@ public class JDBCTemplate<T> {
 		return row;
 	}
 	
-	public List<T> query(Class<T> t, PrepareStatementSetter setter,String sql) throws Exception{
+	public List<T> query(Class<T> t, PrepareStatementSetter setter,String sql) throws SQLException{
 		List<T> list = new ArrayList<>();
 		Connection conn = ConnectionFactory.getInstance().getConnection();
 		PreparedStatement ps = conn.prepareStatement(sql);
@@ -33,30 +33,31 @@ public class JDBCTemplate<T> {
 		ResultSet rs = ps.executeQuery();
 		while(rs.next()){
 			Field[] fields = t.getDeclaredFields();
-			T ins = t.newInstance();//获得实例
-			for (int i = 0; i < fields.length; i++) {
-				fields[i].setAccessible(true);
-				String filedName = fields[i].getName();//获得属性名
-				String fieldTypeName = fields[i].getType().getSimpleName();//获得属性的类型名
-				if (fieldTypeName.equals("int")) {
-					int temp = rs.getInt(filedName);
-					fields[i].set(ins, temp);
-				}else if (fieldTypeName.equals("long")){
-					long temp  = rs.getLong(filedName);
-					fields[i].set(ins, temp);
-				}else if (fieldTypeName.equals("String")){
-					String temp  = rs.getString(filedName);
-					fields[i].set(ins, temp);
-				}else if (fieldTypeName.equals("double")){
-					double temp  = rs.getDouble(filedName);
-					fields[i].set(ins, temp);
-				}else if (fieldTypeName.equals("Date")){
-					Date temp  = rs.getDate(filedName);
-					fields[i].set(ins, temp);
-				}else {
-					throw new RuntimeException("没有匹配的类型");
+			T ins = null;
+			try {
+				ins = t.newInstance();
+				for (int i = 0; i < fields.length; i++) {
+					fields[i].setAccessible(true);
+					String filedName = fields[i].getName();//获得属性名
+					String fieldTypeName = fields[i].getType().getSimpleName();//获得属性的类型名
+					if (fieldTypeName.equals("int")) 
+						fields[i].set(ins, rs.getInt(filedName));
+					else if (fieldTypeName.equals("long"))
+						fields[i].set(ins, rs.getLong(filedName));
+					else if (fieldTypeName.equals("String"))
+						fields[i].set(ins, rs.getString(filedName));
+					else if (fieldTypeName.equals("double"))
+						fields[i].set(ins, rs.getDouble(filedName));
+					else if (fieldTypeName.equals("Date"))
+						fields[i].set(ins, rs.getDate(filedName));
 				}
-			}
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}//获得实例
 			list.add(ins);
 		}
 		return list;

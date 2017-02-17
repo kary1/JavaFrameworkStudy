@@ -129,4 +129,51 @@ Restful风格
 		e.printStackTrace();
 		return new ModelAndView("exception");
   }
-  3.@
+  3.方法书写方法同2
+   @ControllerAdvice
+   public class MyException {
+	   @ExceptionHandler({ Exception.class })
+	   public String dueException(Exception e){
+		   System.out.println(2222);
+		   e.printStackTrace();
+		   return "index";
+       }
+   }
+   
+拦截器Interceptor
+  1.新建拦截器类
+   public class MyInterceptor extends HandlerInterceptorAdapter{
+
+	@Override
+	public boolean preHandle(HttpServletRequest request,
+			HttpServletResponse response, Object handler) throws Exception {
+		System.out.println(1);
+		return 1 > 0;
+	}
+	@Override
+	public void postHandle(HttpServletRequest request,
+			HttpServletResponse response, Object handler,
+			ModelAndView modelAndView) throws Exception {
+		System.out.println(2);
+	}
+	@Override
+	public void afterCompletion(HttpServletRequest request,
+			HttpServletResponse response, Object handler, Exception ex)
+			throws Exception {
+		System.out.println(5);
+	}
+  }
+  2.配置到springmvc
+  <mvc:interceptors>
+    <bean class="com.sky.controllers.MyInterceptor"></bean>(拦截所有请求)1
+    <mvc:interceptor>
+      <mvc:mapping path="/test.do"/>(指定要拦截的请求名)
+      <bean class="com.sky.controllers.MyInterceptor"></bean>(拦截指定请求)2
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/test.do"/>(指定要拦截的请求名)
+      <bean class="com.sky.controllers.MyInterceptor"></bean>(拦截指定请求)3
+    </mvc:interceptor>
+  </mvc:interceptors>
+执行顺序:1pro-2pro-3pro-handlerAdapter-3post-2post-1post-view渲染-3after-2after-1after
+       xpro return false --> xafter
