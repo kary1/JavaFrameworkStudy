@@ -177,3 +177,6 @@ Restful风格
   </mvc:interceptors>
 执行顺序:1pro-2pro-3pro-handlerAdapter-3post-2post-1post-view渲染-3after-2after-1after
        xpro return false --> xafter
+
+	   
+springmvc自定义类型转换
