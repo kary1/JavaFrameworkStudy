@@ -178,5 +178,70 @@ Restful风格
 执行顺序:1pro-2pro-3pro-handlerAdapter-3post-2post-1post-view渲染-3after-2after-1after
        xpro return false --> xafter
 
+
+jsr-303
+  1.配置pom依赖
+    <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-validator -->
+    <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-validator</artifactId>
+        <version>5.3.4.Final</version>
+    </dependency>
+  2.注解修饰实体类
+    @NotNull(message="not empty不能为空 ")
+	private String name;
+  3.注解修饰形参，使用
+    @RequestMapping(value="test", method=RequestMethod.GET)
+	public String login(@Valid Stu stu, BindingResult result, HttpServletRequest req){
+		Map<String, String> check = check(result);
+		req.setAttribute("errfield", check);
+		return "index";
+	}
+  4.回传Map key=filedName  value=errorMessage
+ 	public Map<String,String> check(BindingResult result){
+		Map<String,String> err = new HashMap<>();
+		if (result.hasErrors()) {
+			List<FieldError> list = result.getFieldErrors();
+			FieldError error = null;
+			for (int i = 0; i < list.size(); i++) {
+				error = list.get(i);
+				err.put(error.getField(), error.getDefaultMessage());
+			}
+		}
+		return err;
+	}
 	   
 springmvc自定义类型转换
+  1.Date类型的转换
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+	private Date date;
+	在文本框输入2011-11-11会自动转换
+  2.自定义类型转换
+          需要自己写转换器，并配置在springmvc中
+    转换器类
+    @Component
+    public class ClassChanger implements Converter<String, Point>{
+
+	  @Override
+	  public Point convert(String source) {
+		  Point p = null;
+		  if (source != null && source.split("-").length == 2) {
+	  		 String[] strs = source.split("-");
+	  	    	p = new Point(Double.parseDouble(strs[0]), Double.parseDouble(strs[1]));
+	      }
+		  return p;
+	  }
+    }
+  配置文件
+   <bean id="cv" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+    <property name="converters">
+      <set>
+        <bean class="com.sky.controllers.ClassChanger"></bean>
+      </set>
+    </property>
+  </bean>
+  <mvc:annotation-driven conversion-service="cv"></mvc:annotation-driven>
+  使用
+  @RequestMapping("getLocation")
+  public String login(@RequestParam("location")Point p)
+接收"1.8-2.2"自动调用转换器类的方法返回一个Point对象
