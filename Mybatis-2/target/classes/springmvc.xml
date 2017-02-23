@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
+
+
+  <context:component-scan base-package="com.kary.controllers"></context:component-scan>
+  <!-- 2.1 -->
+  <!-- <context:component-scan base-package="com.kary.service"></context:component-scan> -->
+  <mvc:annotation-driven/>
+  
+  
+  <!-- 建立数据源  dataSource (右键创建-需要commoms-dbcp)-->
+  <bean id="dataSource"
+  	class="org.apache.commons.dbcp.BasicDataSource">
+  	<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+  	<property name="url" value="jdbc:mysql://localhost/test"></property>
+  	<property name="username" value="root"></property>
+  	<property name="password" value="root"></property>
+  </bean>
+  <!-- 创建 sqlSessionFactory (需要MyBatis-spring) -->
+  <bean id="sqlSessionfactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <!-- 数据源 -->
+    <property name="dataSource" ref="dataSource"></property>
+    <!-- 配置文件 -->
+    <property name="mapperLocations" value="classpath:com/kary/entitys/*.xml"></property>
+  </bean>
+  
+  
+  
+  <!--1 创建dao的实现类 -->
+  <bean id="studentDaoImpl" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <!-- dao模版(接口) -->
+    <property name="mapperInterface" value="com.kary.dao.StudentMapper"></property>
+    <!-- factory -->
+    <property name="sqlSessionFactory" ref="sqlSessionfactory"></property>
+  </bean>
+  <!--1 创建service类 添加到bean中 -->
+  <bean name="studentService" class="com.kary.service.StudentService">
+    <property name="sm" ref="studentDaoImpl"></property>
+  </bean>
+<!--2 使用于有大量dao实现类的情况 -->
+<!--   <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    <property name="basePackage" value="com.kary.dao"></property>
+    <property name="sqlSessionFactory" ref="sqlSessionfactory"></property>
+  </bean> -->
+  
+ <!-- 2.2 -->
+ <!-- <bean name="studentService" class="com.kary.service.StudentService" autowire="byType"></bean>  -->
+  
+  
+  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="prefix" value="/"></property>
+    <property name="suffix" value=".jsp"></property>
+  </bean>
+</beans>
