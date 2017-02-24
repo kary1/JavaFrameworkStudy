@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kary.dao.RepliesMapper" >
+  <resultMap id="BaseResultMap" type="com.kary.entitys.Replies" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="replyTime" property="replytime" jdbcType="DATE" />
+    <result column="inflod" property="inflod" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, content, replyTime, inflod
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from replies
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByInfoidAndContent" resultMap="BaseResultMap" parameterType="com.kary.entitys.Replies" >
+    select 
+    <include refid="Base_Column_List" />
+    from replies
+    where inflod = #{inflod,jdbcType=INTEGER} and content = #{content,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByInfoid" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from replies
+    where inflod = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from replies
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.kary.entitys.Replies" >
+    insert into replies (id, content, replyTime, 
+      inflod)
+    values (0, #{content,jdbcType=VARCHAR}, now(), 
+      #{inflod,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kary.entitys.Replies" >
+    insert into replies
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="replytime != null" >
+        replyTime,
+      </if>
+      <if test="inflod != null" >
+        inflod,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="replytime != null" >
+        #{replytime,jdbcType=DATE},
+      </if>
+      <if test="inflod != null" >
+        #{inflod,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kary.entitys.Replies" >
+    update replies
+    <set >
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="replytime != null" >
+        replyTime = #{replytime,jdbcType=DATE},
+      </if>
+      <if test="inflod != null" >
+        inflod = #{inflod,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kary.entitys.Replies" >
+    update replies
+    set content = #{content,jdbcType=VARCHAR},
+      replyTime = #{replytime,jdbcType=DATE},
+      inflod = #{inflod,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
