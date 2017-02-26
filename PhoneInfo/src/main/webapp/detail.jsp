@@ -30,8 +30,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			type : "POST",
     			data : "id="+${info.id}+"&content="+$("#content").val(),
     			dataType : "json",
-    			success : function(Data){
-    				$("#repList").append("<div>发表于："+Data.replytime+"</div><div>"+Data.content+"</div><br>");
+    			success : function(rep){
+    				$("#repList").append("<div>发表于："+rep.replytime+"</div><div>"+rep.content+"</div><br>");
     			},
     			error : function(){
     				alert("failed");
@@ -44,7 +44,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
   <body>
     <h1>${info.title}</h1>
-    <p>发表于：${info.reporttime}</p><br>
+    <p>发表于：<fmt:formatDate value="${info.reporttime}" pattern="yyyy-MM-dd HH:mm:ss"/></p><br>
     <p>${info.content}</p><br>
     <div id="repList">
     <h3>读者回应</h3><br>

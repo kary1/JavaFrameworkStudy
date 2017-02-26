@@ -1,15 +1,13 @@
 package com.kary.entitys;
 
 import java.sql.Timestamp;
-
-import org.springframework.format.annotation.DateTimeFormat;
+import java.text.SimpleDateFormat;
 
 public class Replies {
     private Integer id;
 
     private String content;
 
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Timestamp replytime;
 
     private Integer inflod;
@@ -56,8 +54,10 @@ public class Replies {
         this.content = content == null ? null : content.trim();
     }
 
-    public Timestamp getReplytime() {
-        return replytime;
+    public String getReplytime() {
+    	SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	String format = sf.format(replytime);
+        return format;
     }
 
     public void setReplytime(Timestamp replytime) {
@@ -76,6 +76,11 @@ public class Replies {
 	public String toString() {
 		return "Replies [id=" + id + ", content=" + content + ", replytime="
 				+ replytime + ", inflod=" + inflod + "]";
+	}
+
+	public Timestamp getReplyTime() {
+		
+		return replytime;
 	}
     
     

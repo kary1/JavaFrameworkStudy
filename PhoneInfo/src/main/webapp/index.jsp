@@ -24,7 +24,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-    This is my JSP page. <br>
+<!--    This is my JSP page. <br>
     
     <form action="addInfo.do" method="post">
       id:<input type="text" name="id"><br>
@@ -35,7 +35,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       发表时间：<input type="text" name="reporttime"><br>
      最新回复：<input type="text" name="lastposttime"><br>
       <input type="submit" value="addInfo"><br>
-    </form>
+    </form>  -->
     <center>
     <h1>手机咨询</h1>
     <table>

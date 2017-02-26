@@ -7,8 +7,8 @@
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="replyCount" property="replycount" jdbcType="INTEGER" />
     <result column="viewCount" property="viewcount" jdbcType="INTEGER" />
-    <result column="reportTime" property="reporttime" jdbcType="DATE" />
-    <result column="lastPostTime" property="lastposttime" jdbcType="DATE" />
+    <result column="reportTime" property="reporttime" jdbcType="TIMESTAMP" />
+    <result column="lastPostTime" property="lastposttime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, title, content, replyCount, viewCount, reportTime, lastPostTime
@@ -99,7 +99,7 @@
         reportTime = now(),
       </if>
       <if test="lastposttime != null" >
-        lastPostTime = now(),
+        lastPostTime = #{lastposttime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}

@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.kary.entitys.Replies" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="content" property="content" jdbcType="VARCHAR" />
-    <result column="replyTime" property="replytime" jdbcType="DATE" />
+    <result column="replyTime" property="replytime" jdbcType="TIMESTAMP" />
     <result column="inflod" property="inflod" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >

@@ -62,7 +62,7 @@ public class Informations {
         this.viewcount = viewcount;
     }
 
-    public Date getReporttime() {
+    public Timestamp getReporttime() {
         return reporttime;
     }
 

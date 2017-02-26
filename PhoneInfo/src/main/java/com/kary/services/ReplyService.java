@@ -1,5 +1,8 @@
 package com.kary.services;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +52,8 @@ public class ReplyService {
 			if (row == 1) {
 				temp = rmd.selectByInfoidAndContent(replies);
 				Informations info = new Informations();
-				info.setLastposttime(temp.getReplytime());
+				
+				info.setLastposttime(temp.getReplyTime());
 				info.setId(temp.getInflod());
 				row += imd.updateByPrimaryKeySelective(info);
 			}
