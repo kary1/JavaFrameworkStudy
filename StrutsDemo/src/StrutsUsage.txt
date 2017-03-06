@@ -1,0 +1,21 @@
+1.添加jar包
+2.配置web.xml文件
+  <filter>
+    <filter-name>Struts2</filter-name>
+    <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>Struts2</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+3.配置struts的核心配置文件struts.xml
+  package action result 拦截器
+  <struts>
+  <package name="default" namespace="/" extends="struts-default">
+    <action name="hello" class="com.sky.action.HelloAction">
+      <result [name="SUCCESS"]>/index.jsp</result>  //可使用name属性跳转到对应的jsp中，与action中方法返回的字符串保持一致，不写那么属性默认为success
+    </action>
+  </package>
+  </struts>
+  
+4.创建Action类 建议继承Actionsupport 重写excute方法
