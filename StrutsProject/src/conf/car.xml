@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<package name="car" namespace="/" extends="default">
+	
+		<global-exception-mappings>
+			<exception-mapping result="error" exception="java.sql.SQLException"></exception-mapping>
+		</global-exception-mappings>
+	
+		<action name="car_*" method="{1}" class="com.hw.action.CarAction">
+			<result>/welcome.jsp</result>
+			<result name="fail">/login.jsp</result>
+			<result name="add">/car/add_car.jsp</result>
+			<result name="show">/car/show_car.jsp</result>
+			<result name="add_show" type="chain">car_query</result>
+		</action>
+		
+	</package>
+    
+</struts>
